@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserController {
+	//first welcome message restcontroller method we called
 	@GetMapping("/welcome")
 	public String welcomeUser()
 	{
