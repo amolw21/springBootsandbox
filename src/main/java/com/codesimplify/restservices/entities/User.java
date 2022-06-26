@@ -15,11 +15,11 @@ public class User {
 	private Long id;
 	@Column(name  ="user_name",unique=true,nullable=false,length=50)
 	private String username;
-	@Column(name = "first_name",length = 50,nullable = false)
+	@Column(name = "first_name",unique=true,nullable=false,length = 50)
 	private String firstname;
-	@Column(name = "last_name",length = 50,nullable = false)
+	@Column(name = "last_name",nullable=false,length = 50)
 	private String lastname;
-	@Column(name = "email",length = 50,nullable = false)
+	@Column(name = "email",length = 50,nullable=false)
 	private String email;
 	@Column(name = "role",length = 50,nullable = false)
 	private String role;
