@@ -1,10 +1,13 @@
 package com.codesimplify.restservices.entities;
 
+import java.util.List;
+
 import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -30,7 +33,19 @@ public class User {
 	@Column(name = "ssn",nullable = false,unique = true,length = 50)
 	private String ssn;
 	
+	@OneToMany(mappedBy = "user")
+	private List<Order> orders;
 	
+	
+
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+
 	public User() {
 		super();
 	}
