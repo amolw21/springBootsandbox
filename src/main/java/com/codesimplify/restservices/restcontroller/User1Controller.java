@@ -3,10 +3,14 @@ package com.codesimplify.restservices.restcontroller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,10 +23,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.codesimplify.restservices.entities.User;
 import com.codesimplify.restservices.exceptions.UserExistsException;
+import com.codesimplify.restservices.exceptions.UserNameNotFoundException;
 import com.codesimplify.restservices.exceptions.UserNotFoundException;
 import com.codesimplify.restservices.service.UserService;
 
 @RestController
+@Validated
 public class User1Controller {
 	@Autowired
 	private UserService userService;
@@ -39,7 +45,7 @@ public class User1Controller {
 	 * ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage()); } }
 	 */
 	@PostMapping("/createuser1")
-	public ResponseEntity<Void> createUser(@RequestBody User user,UriComponentsBuilder builder)
+	public ResponseEntity<Void> createUser(@Valid @RequestBody User user,UriComponentsBuilder builder)
 	{
 //		System.out.println(user);
 		try {
@@ -53,7 +59,7 @@ public class User1Controller {
 		}
 	}
 	@GetMapping("/getuser/{userid}")
-	public Optional<User> getUserById(@PathVariable("userid") Long id)
+	public Optional<User> getUserById(@PathVariable("userid") @Min(1) Long id)
 	{
 		try {
 			return userService.getUserById(id);
@@ -62,7 +68,7 @@ public class User1Controller {
 		}
 	}
 	@PutMapping("/updateuser/{userid}")
-	public User updateUserById(@RequestBody User user,@PathVariable("userid") Long id)
+	public User updateUserById(@RequestBody User user,@PathVariable("userid")  Long id)
 	{
 		try {
 			return userService.updateUserbyId(id,user);
@@ -82,8 +88,14 @@ public class User1Controller {
 		}
 	}
 	@GetMapping("/getuser/byusername/{username}")
-	public User getUserByUserName(@PathVariable("username") String username)
+	public User getUserByUserName(@PathVariable("username") String username) throws UserNameNotFoundException
 	{
-		return userService.getUserByUsername(username);
+		User user=userService.getUserByUsername(username);
+		if(user==null)
+		{
+			throw new UserNameNotFoundException("Username :'" +username+"' not Found");
+		}
+		return user;
+		//return userService.getUserByUsername(username);
 	}
 }
